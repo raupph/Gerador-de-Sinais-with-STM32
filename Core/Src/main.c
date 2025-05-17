@@ -87,63 +87,6 @@ int media[2];
 
 #define NAMOSTRAS 64
 
-/*
-///////CRIAR UMA MATRIZ PARA ONDAS DIFERENTES ////////////////// UMA TABELONA
-const uint16_t senoide[NAMOSTRAS] = {
-
-		2047,2247, 2446, 2641,
-		2830, 3011, 3184, 3345,
-		3494, 3629, 3749, 3852,
-		3938, 4005, 4054, 4084,
-		4093, 4084, 4054, 4005,
-		3938, 3852, 3749, 3629,
-		3494, 3345, 3184, 3011,
-		2830, 2641, 2446, 2247,
-		2047, 1846, 1647, 1452,
-		1263, 1082, 909, 748,
-		599, 464, 344, 241,
-		155, 88, 39, 9,
-		0, 9, 39, 88,
-		155, 241, 344, 464,
-		599, 748, 909, 1082,
-		1263, 1452, 1647, 1846
-
-
-};
-
-const uint16_t triangular[NAMOSTRAS] = {
-
-        0, 127, 255, 383, 511, 639, 767, 895, 1023, 1151, 1279, 1407,
-        1535, 1663, 1791, 1919, 2046, 2174, 2302, 2430, 2558, 2686,
-        2814, 2942, 3070, 3198, 3326, 3454, 3582, 3710, 3838, 3965,
-        4093, 4221, 3842, 3714, 3586, 3458, 3330, 3202, 3074, 2946,
-        2818, 2690, 2562, 2434, 2306, 2179, 2051, 1923, 1795, 1667,
-        1539, 1411, 1283, 1155, 1027, 899, 771, 643, 515, 387, 260, 132
-
-
-};
-
-
-const uint16_t quadrada[NAMOSTRAS] = {
-
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        4095, 4095, 4095, 4095, 4095, 4095, 4095, 4095,
-        4095, 4095, 4095, 4095, 4095, 4095, 4095, 4095,
-        4095, 4095, 4095, 4095, 4095, 4095, 4095, 4095,
-        4095, 4095, 4095, 4095, 4095, 4095, 4095, 4095
-
-};
-
-uint16_t sinal_quadrada[NAMOSTRAS];
-
-uint16_t sinal_triangular[NAMOSTRAS];
-
-uint16_t sinal_senoide[NAMOSTRAS];
-*/
-
 typedef enum {SIN=0,TRI,SQR,SAW,NONE} sinal_t;
 
 uint32_t pino[4]={GPIO_PIN_2,GPIO_PIN_3,GPIO_PIN_4,GPIO_PIN_4};
@@ -165,13 +108,15 @@ const uint16_t modSinal[4][NAMOSTRAS] = {
 										155, 241, 344, 464,
 										599, 748, 909, 1082,
 										1263, 1452, 1647, 1846},
+
 									   {0, 127, 255, 383, 511, 639, 767, 895, 1023, 1151, 1279, 1407,
 										1535, 1663, 1791, 1919, 2046, 2174, 2302, 2430, 2558, 2686,
 										2814, 2942, 3070, 3198, 3326, 3454, 3582, 3710, 3838, 3965,
 										4093, 4221, 3842, 3714, 3586, 3458, 3330, 3202, 3074, 2946,
 										2818, 2690, 2562, 2434, 2306, 2179, 2051, 1923, 1795, 1667,
 										1539, 1411, 1283, 1155, 1027, 899, 771, 643, 515, 387, 260, 132
-									   	 },
+									   },
+
 									   {0, 0, 0, 0, 0, 0, 0, 0,
 										0, 0, 0, 0, 0, 0, 0, 0,
 										0, 0, 0, 0, 0, 0, 0, 0,
@@ -181,7 +126,8 @@ const uint16_t modSinal[4][NAMOSTRAS] = {
 										4095, 4095, 4095, 4095, 4095, 4095, 4095, 4095,
 										4095, 4095, 4095, 4095, 4095, 4095, 4095, 4095
 									   },
-										 {0, 127, 255, 383, 511, 639, 767, 895, 1023, 1151, 1279, 1407,
+
+									   {0, 127, 255, 383, 511, 639, 767, 895, 1023, 1151, 1279, 1407,
 										1535, 1663, 1791, 1919, 2046, 2174, 2302, 2430, 2558, 2686,
 										2814, 2942, 3070, 3198, 3326, 3454, 3582, 3710, 3838, 3965,
 										4093, 4221,	0, 0, 0, 0, 0, 0, 0, 0,0,0,
@@ -340,18 +286,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   	 sinAtual=SIN;
- // 	HAL_DMA_Start (&hdma_memtomem_dma2_stream1,(uint32_t *)modSinal[sinAtual],(uint32_t *) sinal,NAMOSTRAS); // transferencia de memoria pra memoria
 
 	HAL_TIM_Base_Start_IT(&htim10);
 	HAL_TIM_Base_Start(&htim6);
 
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)medidas, TAM_MEDIDAS * 2); // (qual adc eh, onde armazena, tamanho)
-
-
-//	__HAL_TIM_SET_AUTORELOAD(&htim6, media[0]);
-
-
-	//__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, media[1]);
 
   /* USER CODE END 2 */
 
@@ -362,43 +301,30 @@ int main(void)
 		// Escala sinal quando necessario
 		if(escala!=nova_escala)
 		{
-		escala=nova_escala;
-		escala_sinal();
+			escala=nova_escala;
+			escala_sinal();
 		}
 
 // Gerencia saida
 		switch (comando) {
-
 		case 0:
-
 			HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_1);
-			//HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
 			HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_1,zero,2,DAC_ALIGN_12B_R);
 			HAL_GPIO_WritePin(GPIOC, (GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4), GPIO_PIN_RESET);
-			/*
-			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_RESET);
-			*/
+			
 			sinAtual=NONE;
 			break;
-			//sprintf(msg, "\r ESTADO = DESLIGADO");
+
 		default :
-			if((sinAtual+1)!=comando)
+			if((sinAtual+1)!=comando) 
 			{
 				sinAtual=comando-1;
 				HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_1);
 			  	escala_sinal();
 			  	HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_1,sinal,NAMOSTRAS,DAC_ALIGN_12B_R);
 			  	HAL_GPIO_WritePin(GPIOC, (GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4), GPIO_PIN_RESET);
-			  	/*
-			  	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_RESET);
-			  	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_RESET);
-			  	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_RESET);
-			  	 */
 			  	HAL_GPIO_WritePin(GPIOC, pino[sinAtual], GPIO_PIN_SET);
-
-				}
+			}
     /* USER CODE END WHILE */
 		}
     /* USER CODE BEGIN 3 */
